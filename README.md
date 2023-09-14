@@ -10,11 +10,11 @@ Dieses Code-Repository beinhaltet eine leichtgewichtige Python-Klasse mit der el
 Response wird standardmässig mit dieser Python-Klasse als `json` erwartet. Soll dies geändert werden ist in der jeweiligen Funktion der Header des API-Calls zu ändern
 
 ```python
-        self.headers = {"Accept": "application/xml"}    
+self.headers = {"Accept": "application/xml"}    
 ```
 
 um den Response dann mit `lxml` zu bearbeiten soll die Funktion nicht `r.json()` retournieren sondern `r.content`. Die Weiterverabeitung kann dann bspw. erfolgen
 
 ```python
-root = ET.fromstring(portfolios)
+root = ET.fromstring(r.content)
 ```

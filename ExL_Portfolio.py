@@ -15,11 +15,12 @@ class ExL_Portfolio:
 
     # getCollection Funktion
     def getCollection(self,params=""):
-        self.params.update({"limit": 100, "offset": 0})
+        thisParams = self.params
+        thisParams.update({"limit": 100, "offset": 0})
         if params != "":
-            self.params.update(params)
+            thisParams.update(params)
         r = requests.get(f"{self.apiUrl}e-collections",
-                        params=self.params,
+                        params=thisParams,
                         headers=self.headers)
         return r.json()
         
@@ -32,10 +33,17 @@ class ExL_Portfolio:
 
     #List all Portfolios for given collection and service either by id
     def getPortfolios(self,collectionId,serviceId,params=""):
-        self.params.update({"limit": 100, "offset": 0})
+        thisParams = self.params
+        thisParams.update({"limit": 100, "offset": 0})
         if params != "":
-            self.params.update(params)
+            thisParams.update(params)
         r = requests.get(f"{self.apiUrl}e-collections/{collectionId}/e-services/{serviceId}/portfolios",
+                        params=thisParams,
+                        headers=self.headers)
+        return  r.json()
+
+    def getPortfolioDetails(self,collectionId,serviceId,portfolioId):
+        r = requests.get(f"{self.apiUrl}e-collections/{collectionId}/e-services/{serviceId}/portfolios/{portfolioId}",
                         params=self.params,
                         headers=self.headers)
         return  r.json()
