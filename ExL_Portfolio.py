@@ -10,16 +10,32 @@ class ExL_Portfolio:
         load_dotenv()
         self.apiKey = os.getenv("apiKey")
         self.headers = {"Accept": "application/json"}
-        self.params = {'apikey': self.apiKey, "limit": 100, "offset": 0}
+        self.params = {'apikey': self.apiKey}
         self.apiUrl = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/electronic/"
 
     # getCollection Funktion
     def getCollection(self,params=""):
+        self.params.update({"limit": 100, "offset": 0})
         if params != "":
             self.params.update(params)
         r = requests.get(f"{self.apiUrl}e-collections",
                         params=self.params,
                         headers=self.headers)
-        collectionData = r.json()
-        return collectionData
-    
+        return r.json()
+        
+    # die Service-ID ist neben der Collection ID wesentlicher Bestandteil für die API-Url zur Behandlung der einzelnen Portfolios
+    def getServices(self,collectionId):
+        r = requests.get(f"{self.apiUrl}e-collections/{collectionId}/e-services",
+                        params=self.params,
+                        headers=self.headers)
+        return  r.json()
+
+    #List all Portfolios for given collection and service either by id
+    def getPortfolios(self,collectionId,serviceId,params=""):
+        self.params.update({"limit": 100, "offset": 0})
+        if params != "":
+            self.params.update(params)
+        r = requests.get(f"{self.apiUrl}e-collections/{collectionId}/e-services/{serviceId}/portfolios",
+                        params=self.params,
+                        headers=self.headers)
+        return  r.json()
