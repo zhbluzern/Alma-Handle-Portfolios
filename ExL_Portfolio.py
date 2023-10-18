@@ -53,13 +53,11 @@ class ExL_Portfolio:
                         headers=self.headers)
         return r.json()
     
+    # Return the PortfolioID for a given MMSID (resource_metadata.mms_id.value)
     def getPortfolioByMMSId(self,portfolios,collectionId,serviceId,mmsId):
         returnPortfolioId = None
         for portfolio in portfolios["portfolio"]:
-            #print(portfolio['id'])
             portfolioData = ExL_Portfolio.getPortfolioDetails(self,collectionId,serviceId,portfolio['id'])
-            #print(portfolioData)
-            
             if portfolioData["resource_metadata"]["mms_id"]["value"] == mmsId:
                 returnPortfolioId = (portfolio["id"])
             
