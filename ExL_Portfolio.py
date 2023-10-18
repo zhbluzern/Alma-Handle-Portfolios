@@ -73,11 +73,21 @@ class ExL_Portfolio:
             
         return returnPortfolioId
 
+## Class to handle with the ExL-Bibliographics-API to handle some portfolio related calls
+class ExL_Bib:
+
+    # Initialisiere ExLibris-Portfolio Klasse für weitere API-Calls
+    def __init__(self, apiKey):
+        self.apiKey = apiKey
+        self.headers = {"Accept": "application/json"}
+        self.params = {'apikey': self.apiKey, "view":"full", "expand":"None"}
+        self.apiUrl = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/bibs"
+
     # Check if mmsId is NZ Id and returns the local IZ mms id for portfolio creation
     def checkMMSIdisNZId(self, mmsId):
-        thisParams = {}
-        thisParams.update({"nz_mms_id": mmsId, "view":"full", "expand":"None", "apikey":self.apiKey})
-        r = requests.get(f"https://api-eu.hosted.exlibrisgroup.com/almaws/v1/bibs",
+        thisParams = self.params
+        thisParams.update({"nz_mms_id": mmsId})
+        r = requests.get(f"{self.apiUrl}",
                                 params=thisParams,
                                 headers=self.headers)
         result = r.json()
@@ -93,9 +103,9 @@ class ExL_Portfolio:
 
     # Check if an IZ MMS ID is given, returns True if it is a IZ id, returns "Error" on Error
     def checkMMSIdisIZId(self, mmsId):
-        thisParams = {}
-        thisParams.update({"mms_id": mmsId, "view":"full", "expand":"None", "apikey":self.apiKey})
-        r = requests.get(f"https://api-eu.hosted.exlibrisgroup.com/almaws/v1/bibs",
+        thisParams = self.params
+        thisParams.update({"mms_id": mmsId})
+        r = requests.get(f"{self.apiUrl}",
                                 params=thisParams,
                                 headers=self.headers)
         result = r.json()
@@ -111,3 +121,10 @@ class ExL_Portfolio:
                     return False
             except:
                 return None
+    
+    def getNumOfPortfolioByMMSId(self, mmsId):
+        r = requests.get(f"{self.apiUrl}/{mmsId}/portfolios",
+                                params=self.params,
+                                headers=self.headers)
+        result = r.json()
+        return result["total_record_count"]
