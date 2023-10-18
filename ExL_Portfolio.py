@@ -1,4 +1,5 @@
 import requests
+import json
 
 class ExL_Portfolio:
 
@@ -47,11 +48,13 @@ class ExL_Portfolio:
     
     #Create a new Portfolio
     def createPortfolio(self,collectionId,serviceId,portfolioData):
+        thisHeaders = self.headers
+        thisHeaders.update({"Content":"application/json"})
         r = requests.post(f"{self.apiUrl}e-collections/{collectionId}/e-services/{serviceId}/portfolios/",
                         params=self.params,
-                        data=portfolioData,
-                        headers=self.headers)
-        return r.json()
+                        json=portfolioData,
+                        headers=thisHeaders)
+        return r
     
     # Return the PortfolioID for a given MMSID (resource_metadata.mms_id.value)
     def getPortfolioByMMSId(self,portfolios,collectionId,serviceId,mmsId):
@@ -63,4 +66,41 @@ class ExL_Portfolio:
             
         return returnPortfolioId
 
+    # Check if mmsId is NZ Id and returns the local IZ mms id for portfolio creation
+    def checkMMSIdisNZId(self, mmsId):
+        thisParams = {}
+        thisParams.update({"nz_mms_id": mmsId, "view":"full", "expand":"None", "apikey":self.apiKey})
+        r = requests.get(f"https://api-eu.hosted.exlibrisgroup.com/almaws/v1/bibs",
+                                params=thisParams,
+                                headers=self.headers)
+        result = r.json()
+        
+        try:
+            result["errorsExist"] == "True"
+            return "Error"
+        except KeyError:
+            try: 
+                return result["bib"][0]["mms_id"]
+            except:
+                return None
 
+    # Check if an IZ MMS ID is given, returns True if it is a IZ id, returns "Error" on Error
+    def checkMMSIdisIZId(self, mmsId):
+        thisParams = {}
+        thisParams.update({"mms_id": mmsId, "view":"full", "expand":"None", "apikey":self.apiKey})
+        r = requests.get(f"https://api-eu.hosted.exlibrisgroup.com/almaws/v1/bibs",
+                                params=thisParams,
+                                headers=self.headers)
+        result = r.json()
+        
+        try:
+            result["errorsExist"] == "True"
+            return "Error"
+        except KeyError:
+            try: 
+                if result["bib"][0]["mms_id"] == mmsId:
+                    return True
+                else:
+                    return False
+            except:
+                return None
