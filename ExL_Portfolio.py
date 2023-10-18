@@ -56,6 +56,13 @@ class ExL_Portfolio:
                         headers=thisHeaders)
         return r.json()
     
+    #Delete an existing Portfolio
+    def deletePortfolio(self,collectionId,serviceId,portfolioId):
+        r = requests.delete(f"{self.apiUrl}e-collections/{collectionId}/e-services/{serviceId}/portfolios/{portfolioId}",
+                            params = self.params,
+                            headers = self.headers)
+        return r
+
     # Return the PortfolioID for a given MMSID (resource_metadata.mms_id.value)
     def getPortfolioByMMSId(self,portfolios,collectionId,serviceId,mmsId):
         returnPortfolioId = None
