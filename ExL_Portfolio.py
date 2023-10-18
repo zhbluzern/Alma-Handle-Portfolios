@@ -1,14 +1,10 @@
-import json
 import requests
-from dotenv import load_dotenv
-import os
 
 class ExL_Portfolio:
 
     # Initialisiere ExLibris-Portfolio Klasse für weitere API-Calls
-    def __init__(self):
-        load_dotenv()
-        self.apiKey = os.getenv("apiKey")
+    def __init__(self, apiKey):
+        self.apiKey = apiKey
         self.headers = {"Accept": "application/json"}
         self.params = {'apikey': self.apiKey}
         self.apiUrl = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/electronic/"
