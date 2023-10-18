@@ -15,7 +15,7 @@ class ExL_Portfolio:
         thisParams.update({"limit": 100, "offset": 0})
         if params != "":
             thisParams.update(params)
-        r = requests.get(f"{self.apiUrl}e-collections",
+        r = requests.get(f"{self.apiUrl}e-collections/",
                         params=thisParams,
                         headers=self.headers)
         return r.json()
@@ -52,3 +52,17 @@ class ExL_Portfolio:
                         data=portfolioData,
                         headers=self.headers)
         return r.json()
+    
+    def getPortfolioByMMSId(self,portfolios,collectionId,serviceId,mmsId):
+        returnPortfolioId = None
+        for portfolio in portfolios["portfolio"]:
+            #print(portfolio['id'])
+            portfolioData = ExL_Portfolio.getPortfolioDetails(self,collectionId,serviceId,portfolio['id'])
+            #print(portfolioData)
+            
+            if portfolioData["resource_metadata"]["mms_id"]["value"] == mmsId:
+                returnPortfolioId = (portfolio["id"])
+            
+        return returnPortfolioId
+
+
