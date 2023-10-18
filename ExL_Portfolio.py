@@ -42,8 +42,17 @@ class ExL_Portfolio:
                         headers=self.headers)
         return  r.json()
 
+    #List all detailed portfolio informations "portfolio metadata" (e.g. links)
     def getPortfolioDetails(self,collectionId,serviceId,portfolioId):
         r = requests.get(f"{self.apiUrl}e-collections/{collectionId}/e-services/{serviceId}/portfolios/{portfolioId}",
                         params=self.params,
                         headers=self.headers)
         return  r.json()
+    
+    #Create a new Portfolio
+    def createPortfolio(self,collectionId,serviceId,portfolioData):
+        r = requests.post(f"{self.apiUrl}e-collections/{collectionId}/e-services/{serviceId}/portfolios/",
+                        params=self.params,
+                        data=portfolioData,
+                        headers=self.headers)
+        return r.json()
