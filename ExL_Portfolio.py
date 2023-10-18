@@ -54,7 +54,7 @@ class ExL_Portfolio:
                         params=self.params,
                         json=portfolioData,
                         headers=thisHeaders)
-        return r
+        return r.json()
     
     # Return the PortfolioID for a given MMSID (resource_metadata.mms_id.value)
     def getPortfolioByMMSId(self,portfolios,collectionId,serviceId,mmsId):
