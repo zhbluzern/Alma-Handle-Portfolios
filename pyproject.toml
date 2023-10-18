@@ -1,0 +1,6 @@
+[tool.poetry]
+name = "Alma Handle Portfolios"
+version = "0.1"
+description = "Handle ExLibris Alma Portfolio Records"
+authors = ["Christian Erlinger <christian.erlinger@zhluzern.ch>"]
+readme = "README.md"
